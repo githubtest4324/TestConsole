@@ -1,9 +1,31 @@
 module.exports = {
+    rest0 : {
+        type : 'rest',
+        url : 'url0',
+        input : 'str',
+        output : {
+            type : 'list',
+            itemType : 'str'
+        }
+    },
     ns1 : {
+        ent1: {
+            type: 'entity',
+            properties: {
+                e1_f1: 'str'
+            }
+        },
         rest1 : {
             type : 'rest',
             url : 'url1',
-            input : 'str',
+            input : {
+                type : 'entity',
+                name : 'ent1', 
+                properties : {
+                    f1 : 'str'
+                },
+                p2 : 'p2',
+            },
             output : {
                 type : 'list',
                 itemType : 'str'
@@ -47,16 +69,14 @@ module.exports = {
         rest5 : {
             type : 'rest',
         },
-        rest6: {
-            type: 'rest',
-            url: 'url4',
-            input: {
+        rest6 : {
+            type : 'rest',
+            url : 'url4',
+            input : {
                 properties : {
                     f1 : 'str'
                 }
             }
         }
-        
-        
     }
 };
