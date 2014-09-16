@@ -1,74 +1,48 @@
-var jst = require('./JsType');
 
-var x = {
-    a : 'a',
-    arr : [
-            'b', {
-                d : 'd',
-                e : 'e'
-            }
-    ]
+var f1 = function(){
+    var res = [];
+    for(var i = 0; i<3; i++){
+        var f = function(){
+            console.log(i);
+        };
+        res.push(f);
+    }
+    
+    return res;
 };
 
-var data = {
-    x : {
-        a : {
-            b : 'b'
-        },
-        y : undefined,
-        c : 'c',
-        arr : [
-                'd', undefined
-        ]
-    },
-    z : undefined,
-    t : undefined
-};
-data.z = data.x;
-data.x.y = data.z;
-data.t = data.z;
-data.x.arr[1] = data.t;
-
-var seenObjects = [];
-
-var traverse = function (key, val, parent, isRoot, path, level) {
-    var isArray = val instanceof Array;
-    var isObject = typeof val === 'object' && !isArray;
-
-    // Leaf
-    var isLeaf = false;
-    if (!(isObject || isArray)) {
-        isLeaf = true;
+var f2 = function(){
+    var res = [];
+    for(var i = 0; i<3; i++){
+        var f = function(j){
+            return function(){
+                console.log(j);
+            };
+        }(i);
+        res.push(f);
     }
-
-    // Circular
-    var isCircular = false;
-    if (seenObjects.indexOf(val) !== -1) {
-        isCircular = true;
-    } else {
-        seenObjects.push(val);
-    }
-
-    console.log('key: ' + key + ', isRoot: ' + isRoot + ', isLeaf: ' + isLeaf + ', level: ' + level + ', isCircular: ' + isCircular + ', path: ' + path);
-    if (!isCircular) {
-        if (isObject) {
-            for ( var childKey in val) {
-                newPath = path.concat([
-                    childKey
-                ]);
-                traverse(childKey, val[childKey], val, false, newPath, level + 1);
-            }
-        }
-        if (isArray) {
-            for (var i = 0; i < val.length; i++) {
-                var childKey = '' + i;
-                newPath = path.concat([
-                    childKey
-                ]);
-                traverse(childKey, val[i], val, false, newPath, level + 1);
-            }
-        }
-    }
+    
+    return res;
 };
 
-traverse(undefined, data, undefined, true, [], 0);
+var x = f1();
+x[0]();
+x[1]();
+x[2]();
+
+
+// Output: 
+// >> 3
+// >> 3
+// >> 3
+
+var x = f2();
+x[0]();
+x[1]();
+x[2]();
+
+
+// Output: 
+// >> 0
+// >> 1
+// >> 2
