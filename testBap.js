@@ -1,16 +1,28 @@
+var su = require('../bap/utils/string');
 var fs = require('fs');
 
-var Bap = require('bap');
-
-var f1 = require('./f1');
+var Bap = require('bap').Bap;
 
 var bap = new Bap([
-   				{
-   					fileName : 'f1',
-   					content : f1
-   				}
-   		]);
-var result = bap.compile();
+    {
+        name : 'f1',
+        dsl : {
+            config : {
+                generators : [
+                    'restJava'
+                ],
+                rest_java : {
+                    conf1: 'conf1'
+                }
+            }
+        }
+    }
+]);
 
-console.log(result.toString());
-console.log(result.errorsToStringArray());
+bap.generate();
+console.log(bap.log.toStringArray());
+//console.log(bap.printMeta());
+//console.log(su.pretty(bap.config.value));
+console.log(bap.printGenerators());
+
+
