@@ -3,7 +3,16 @@ var sample1 = require('../json-easy-filter/tests/sampleData1.js');
 var traverse = require('json-easy-filter').traverse;
 var merge = require('../bap/utils/merge');
 var JefNode = require('json-easy-filter').JefNode;
-var nodeUtils = require('util');
-var sprintf = require('sprintf-js').sprintf;
+var ejs = require('ejs');
+var fs = require('fs');
 
-console.log(su.format('%04d', Math.floor(Math.random()*9999)));
+var template = ejs.compile(fs.readFileSync(__dirname + "/test.ejs", "utf8"), {
+    open : '|',
+    close : '|'
+});
+
+console.log(template({
+    user : {
+        name : 'liviu'
+    }
+}));
