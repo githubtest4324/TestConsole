@@ -8,11 +8,12 @@ var bap = new Bap([
         name : 'f1',
         dsl : {
             config : {
+                rootFolder : 'genRoot/',
                 generators : [
-                    'restJava'
+                    'entityJava'
                 ],
-                rest_java : {
-                    conf1 : 'conf1'
+                entityJava : {
+                    sourceDir : 'src/java/'
                 }
             },
             ns1 : {
@@ -30,21 +31,24 @@ var bap = new Bap([
                         p4 : {
                             type : 'str'
                         },
-//                        p5 : {
-//                            type : '[int]'
-//                        },
+                        p5 : {
+                            type : '[int]'
+                        },
                         p6 : {
                             name : 'E3',
                             properties : {
                                 p3 : 'str'
                             }
+                        },
+                        p7 : {
+                            type : {
+                                name : 'E4',
+                                properties : {
+                                    p7_E4 : 'str'
+                                }
+                            }
                         }
                     }
-                },
-                E2 : {
-                    model : true,
-                    type : 2,
-                    properties : 3
                 },
                 Rest1 : {
                     type : 'rest',
@@ -63,7 +67,7 @@ var bap = new Bap([
                     input : {
                         model : true,
                         properties : {
-                            p4 : 'E1',
+                            p4 : '[E1]',
                             p5 : 'str'
                         }
                     },
@@ -89,14 +93,41 @@ var bap = new Bap([
                     }
                 }
             }
-
         }
     }
 ]);
 
 bap.generate();
-console.log(bap.log.toStringArray());
-// console.log(bap.printMeta());
-// console.log(su.pretty(bap.config.value));
-// console.log(bap.printGenerators());
 console.log(bap.printModel());
+console.log(bap.log.toStringArray());
+
+
+var bapModel = bap.dsl.filter(function (node) {
+
+    if (node.meta.modelEntity && node.meta.modelProperty) {
+        // Inline entity
+        var prop = node.meta.modelProperty;
+        var type;
+        if (bap.model.isList(prop)) {
+            type = su.format("list(%s)", bap.model.baseType(prop));
+        } else {
+            type = prop.type;
+        }
+        return su.format("Inline Entity: property: %s, entity: %s, dslPath: %s", type, node.meta.modelEntity.qualifiedName, node.path);
+    } else if (node.meta.modelEntity) {
+        // Entity
+        return su.format("Entity: qn: %s, dslPath: %s", node.meta.modelEntity.qualifiedName, node.path);
+    } else if (node.meta.modelProperty) {
+        // Property
+        var prop = node.meta.modelProperty;
+        var type;
+        if (bap.model.isList(prop)) {
+            type = su.format("list(%s)", bap.model.baseType(prop));
+        } else {
+            type = prop.type;
+        }
+        var entity = bap.model.getPropEntity(prop);
+        return su.format("Property: type: %s, parent entity: %s, dslPath: %s", type, entity.qualifiedName, node.path);
+    }
+});
+console.log(su.pretty(bapModel));
