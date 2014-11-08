@@ -47,7 +47,43 @@ var bap = new Bap([
                                     p7_E4 : 'str'
                                 }
                             }
-                        }
+                        },
+                        p8 : {
+                            type : {
+                                properties : {
+                                    p8_p1 : 'str'
+                                }
+                            }
+                        },
+                        p9 : {
+                            type : {
+                                list : {
+                                    name : 'E5',
+                                    properties : {
+                                        p1 : 'str'
+                                    }
+                                }
+                            }
+
+                        },
+                        p10 : {
+                            type : {
+                                list : {
+                                    properties : {
+                                        p1 : 'str'
+                                    }
+                                }
+                            }
+
+                        },
+                        p11 : {
+                            list : {
+                                name: 'E6',
+                                properties : {
+                                    p1 : 'str'
+                                }
+                            }
+                        },
                     }
                 },
                 Rest1 : {
@@ -73,13 +109,13 @@ var bap = new Bap([
                     },
                     output : {
                         model : true,
-                        type : '[str]',
+                        type : '[str]'
                     }
                 },
                 Page1 : {
                     type : 'page',
                     model : {
-                        mdodel : true,
+                        model : true,
                         properties : {
                             p5 : 'str',
                             p6 : {
@@ -100,7 +136,6 @@ var bap = new Bap([
 bap.generate();
 console.log(bap.printModel());
 console.log(bap.log.toStringArray());
-
 
 var bapModel = bap.dsl.filter(function (node) {
 
@@ -126,8 +161,8 @@ var bapModel = bap.dsl.filter(function (node) {
         } else {
             type = prop.type;
         }
-        var entity = bap.model.getPropEntity(prop);
-        return su.format("Property: type: %s, parent entity: %s, dslPath: %s", type, entity.qualifiedName, node.path);
+        var entity = bap.model.propEntity(prop);
+        return su.format("Property: property name: %s, type: %s, parent entity: %s, dslPath: %s", bap.model.propName(prop), type, entity.qualifiedName, node.path);
     }
 });
 console.log(su.pretty(bapModel));
