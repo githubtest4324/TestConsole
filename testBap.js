@@ -8,12 +8,11 @@ var bap = new Bap([
         name : 'f1',
         dsl : {
             config : {
-                rootFolder : 'genRoot/',
                 generators : [
                     'entityJava'
                 ],
                 entityJava : {
-                    sourceDir : 'src/java/'
+                    sourceDir : 'genRoot/src/java/'
                 }
             },
             ns1 : {

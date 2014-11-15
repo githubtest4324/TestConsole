@@ -7,8 +7,8 @@ var ejs = require('ejs');
 var fs = require('fs');
 
 var template = ejs.compile(fs.readFileSync(__dirname + "/test.ejs", "utf8"), {
-    open : '|',
-    close : '|'
+    open : '||',
+    close : '||'
 });
 
 console.log(template({
