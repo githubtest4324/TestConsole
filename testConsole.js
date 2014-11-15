@@ -1,6 +1,16 @@
 var fs = require('fs');
 var utils = require('util');
 var compdir = require('compare-folders');
+var multimatch = require('multimatch');
+
+console.log(multimatch('a2.txt', 'a*.txt'));
+
+function getFilesizeInBytes (filename) {
+    var stats = fs.statSync(filename)
+    var fileSizeInBytes = stats["size"]
+    return fileSizeInBytes
+};
+console.log(getFilesizeInBytes('/media/data/f/temp/00/dir2/a4.txt'));
 
 var res = compdir.compareSync('/media/data/f/temp/00/dir1', '/media/data/f/temp/00/dir2');
 debugger;
