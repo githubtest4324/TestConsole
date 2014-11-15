@@ -1,55 +1,39 @@
-var su = require('../bap/utils/string');
-var sample1 = require('../json-easy-filter/tests/sampleData1.js');
-var traverse = require('json-easy-filter').traverse;
-var merge = require('../bap/utils/merge');
-var JefNode = require('json-easy-filter').JefNode;
-var ejs = require('ejs');
 var fs = require('fs');
-var async = require('async');
-var sleep = require('sleep');
+var utils = require('util');
+var compdir = require('compare-folders');
 
-
-
-var x = function(done){
-    process.nextTick(function(){
-        for(var i = 0; i<5; i++){
-            console.log('x'+i);
-            sleep.sleep(1);
-        }
-        done();
-    });
-};
-var y = function(done){
-    process.nextTick(function(){
-        for(var i = 0; i<5; i++){
-            console.log('y'+i);
-            sleep.sleep(1);
-        }
-        done()
-    });
-};
-var z = function(done){
-    process.nextTick(function(){
-        for(var i = 0; i<5; i++){
-            console.log('z'+i);
-            sleep.sleep(1);
-        }
-//        done()
-    });
+var res = compdir.compareSync('/media/data/f/temp/00/dir1', '/media/data/f/temp/00/dir2');
+debugger;
+var tab = function (tabs) {
+    var res = '';
+    while (tabs--) {
+        res += '\t';
+    }
+    return res;
 };
 
-async.parallel([x, y],function(){
-    console.log('done');
+console.log('');
+res.forEach(function (c) {
+    var state;
+    switch (c.state) {
+    case 'equal':
+        state = '=';
+        break;
+    case 'left':
+        state = '->';
+        break;
+    case 'right':
+        state = '<-';
+        break;
+    case 'distinct':
+        state = '!=';
+        break;
+    default:
+        state = '?';
+    }
+    var p1 = c.name1 ? c.name1 : '';
+    var p2 = c.name2 ? c.name2 : '';
+    var type1 = c.type1 ? c.type1 : 'missing';
+    var type2 = c.type2 ? c.type2 : 'missing';
+    console.log(utils.format('%s%s(%s)%s%s(%s)', tab(c.level), p1, type1, state, p2, type2));
 });
-z();
-
-
-//var async_function = function(val){
-//    process.nextTick(function(){
-//        console.log(val)
-//    });
-//};
-//
-//async_function(42);
-
-console.log('aici');
