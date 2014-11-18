@@ -3,17 +3,9 @@ var utils = require('util');
 var compdir = require('compare-folders');
 var multimatch = require('multimatch');
 
-console.log(multimatch('a2.txt', 'a*.txt'));
+var tests = '/home/liviu/git/compare-folders/tests/test5';
+var res = compdir.compareSync(tests+'/left', tests+'/right');
 
-function getFilesizeInBytes (filename) {
-    var stats = fs.statSync(filename)
-    var fileSizeInBytes = stats["size"]
-    return fileSizeInBytes
-};
-console.log(getFilesizeInBytes('/media/data/f/temp/00/dir2/a4.txt'));
-
-var res = compdir.compareSync('/media/data/f/temp/00/dir1', '/media/data/f/temp/00/dir2');
-debugger;
 var tab = function (tabs) {
     var res = '';
     while (tabs--) {
@@ -22,8 +14,13 @@ var tab = function (tabs) {
     return res;
 };
 
-console.log('');
-res.forEach(function (c) {
+console.log('equal: '+res.equal);
+console.log('distinct: '+res.distinct);
+console.log('left: '+res.left);
+console.log('right: '+res.right);
+console.log('differencies: '+res.differencies);
+console.log('same: '+res.same);
+res.diffSet.forEach(function (c) {
     var state;
     switch (c.state) {
     case 'equal':
