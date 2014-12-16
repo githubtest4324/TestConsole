@@ -1,46 +1,14 @@
 var fs = require('fs');
 var utils = require('util');
-var compdir = require('compare-folders');
 var multimatch = require('multimatch');
 
-var tests = '/home/liviu/git/compare-folders/tests/test5';
-var res = compdir.compareSync(tests+'/left', tests+'/right');
+var fd = fs.openSync('/usr/bin/gcov-4.8', 'r');
+var buffer = new Buffer(4);
+var s = fs.readSync(fd, buffer, 0, 4, null);
+console.log(buffer);
 
-var tab = function (tabs) {
-    var res = '';
-    while (tabs--) {
-        res += '\t';
-    }
-    return res;
-};
+var buffer2 = new Buffer(4);
+fs.readSync(fd, buffer2, 0, 4, 0);
+console.log(buffer2);
 
-console.log('equal: '+res.equal);
-console.log('distinct: '+res.distinct);
-console.log('left: '+res.left);
-console.log('right: '+res.right);
-console.log('differencies: '+res.differencies);
-console.log('same: '+res.same);
-res.diffSet.forEach(function (c) {
-    var state;
-    switch (c.state) {
-    case 'equal':
-        state = '=';
-        break;
-    case 'left':
-        state = '->';
-        break;
-    case 'right':
-        state = '<-';
-        break;
-    case 'distinct':
-        state = '!=';
-        break;
-    default:
-        state = '?';
-    }
-    var p1 = c.name1 ? c.name1 : '';
-    var p2 = c.name2 ? c.name2 : '';
-    var type1 = c.type1 ? c.type1 : 'missing';
-    var type2 = c.type2 ? c.type2 : 'missing';
-    console.log(utils.format('%s%s(%s)%s%s(%s)', tab(c.level), p1, type1, state, p2, type2));
-});
+console.log(buffer.equals(buffer2));
