@@ -3,8 +3,8 @@ var utils = require('util');
 var compdir = require('compare-folders');
 var multimatch = require('multimatch');
 
-var tests = '/home/liviu/git/compare-folders/tests/test5';
-var res = compdir.compareSync(tests+'/left', tests+'/right');
+var tests = '/home/liviu/git/compare-folders/tests/root';
+var res = compdir.compareSync(tests+'/d13', tests+'/d14');
 
 var tab = function (tabs) {
     var res = '';
