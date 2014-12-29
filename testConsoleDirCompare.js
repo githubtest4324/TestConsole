@@ -1,46 +1,24 @@
-var fs = require('fs');
 var utils = require('util');
-var compdir = require('compare-folders');
-var multimatch = require('multimatch');
+var dircompare = require('dir-compare');
 
 var tests = '/home/liviu/git/compare-folders/tests/root';
-var res = compdir.compareSync(tests+'/d13', tests+'/d14');
+var res = dircompare.compareSync(tests + '/d1', tests + '/d2', {compareContent: true});
+//var res = dircompare.compareSync('/media/data/f/temp/00/dircompare/d1', '/media/data/f/temp/00/dircompare/d2');
 
-var tab = function (tabs) {
-    var res = '';
-    while (tabs--) {
-        res += '\t';
-    }
-    return res;
-};
-
-console.log('equal: '+res.equal);
-console.log('distinct: '+res.distinct);
-console.log('left: '+res.left);
-console.log('right: '+res.right);
-console.log('differencies: '+res.differencies);
-console.log('same: '+res.same);
-res.diffSet.forEach(function (c) {
-    var state;
-    switch (c.state) {
-    case 'equal':
-        state = '=';
-        break;
-    case 'left':
-        state = '->';
-        break;
-    case 'right':
-        state = '<-';
-        break;
-    case 'distinct':
-        state = '!=';
-        break;
-    default:
-        state = '?';
-    }
-    var p1 = c.name1 ? c.name1 : '';
-    var p2 = c.name2 ? c.name2 : '';
-    var type1 = c.type1 ? c.type1 : 'missing';
-    var type2 = c.type2 ? c.type2 : 'missing';
-    console.log(utils.format('%s%s(%s)%s%s(%s)', tab(c.level), p1, type1, state, p2, type2));
+console.log('equal: ' + res.equal);
+console.log('distinct: ' + res.distinct);
+console.log('left: ' + res.left);
+console.log('right: ' + res.right);
+console.log('differences: ' + res.differences);
+console.log('same: ' + res.same);
+res.diffSet.forEach(function (entry) {
+    var state = {
+        'equal' : '==',
+        'left' : '->',
+        'right' : '<-',
+        'distinct' : '<>'
+    }[entry.state];
+    var name1 = entry.name1 ? entry.name1 : '';
+    var name2 = entry.name2 ? entry.name2 : '';
+    console.log(utils.format('%s(%s)%s%s(%s)', name1, entry.type1, state, name2, entry.type2));
 });
